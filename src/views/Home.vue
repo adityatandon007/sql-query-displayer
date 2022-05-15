@@ -5,6 +5,12 @@
       @select="setTable"
       :selected-table="selectedTable"
     />
+    <div class="d-flex justify-space-between align-center px-3">
+      <span>Total Columns ({{ tableColumns.length }})</span>
+      <v-btn small outlined text @click="selectAllColumns">
+        Select all columns
+      </v-btn>
+    </div>
     <column-selector
       :columns="tableColumns"
       @update-columns="setColumns"
@@ -67,6 +73,9 @@ export default {
     },
     setColumns(columns) {
       this.selectedColumns = [...columns];
+    },
+    selectAllColumns() {
+      this.selectedColumns = [...this.tableColumns];
     },
   },
 };
