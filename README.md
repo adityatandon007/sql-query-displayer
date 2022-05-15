@@ -1,4 +1,11 @@
 # sql-query-displayer
+A sql query displayer made with [vuejs](https://vuejs.org/) and [vuetify](https://vuetifyjs.com/en/)
+
+## Checkout the app below
+[SQL QUERY DISPLAYER](https://628127729c19754abd0cf9d9--sql-query-displayer.netlify.app/#/)
+
+Screenshot:
+![sql query builder](images/sql-query-displayer.png)
 
 ## Project setup
 ```
