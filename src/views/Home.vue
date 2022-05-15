@@ -8,7 +8,7 @@
       />
       <div class="d-flex justify-space-between align-center">
         <span>Total Columns ({{ tableColumns.length }})</span>
-        <v-btn small outlined text @click="selectAllColumns">
+        <v-btn small outlined color="primary" @click="selectAllColumns">
           Select all columns
         </v-btn>
       </div>
@@ -24,11 +24,10 @@
         <v-btn
           small
           outlined
-          text
+          color="primary"
           :disabled="!selectedColumns.length"
           @click="setFilter"
         >
-          <v-icon>mdi-plus</v-icon>
           add filter
         </v-btn>
       </div>
