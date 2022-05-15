@@ -73,13 +73,14 @@
     </v-col>
     <v-col cols="1">
       <v-btn color="error" icon @click="removeFilter(localFilter.index)">
-        <v-icon>mdi-delete-outline</v-icon>
+        <v-icon>{{deleteOutlineIcon}}</v-icon>
       </v-btn>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import { mdiDeleteOutline } from "@mdi/js";
 export default {
   name: "FilterSelector",
   props: {
@@ -129,6 +130,7 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
       },
+      deleteOutlineIcon: mdiDeleteOutline,
     };
   },
   methods: {

@@ -16,8 +16,7 @@
         target="_blank"
         text
       >
-        <span class="mr-2">Go to Repo</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        <v-icon>{{githubIcon}}</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -28,10 +27,11 @@
 </template>
 
 <script>
+import { mdiGithub } from "@mdi/js";
 export default {
   name: "App",
   data: () => ({
-    //
+    githubIcon: mdiGithub,
   }),
 };
 </script>
