@@ -26,16 +26,75 @@ export default {
         return [];
       },
     },
+    selectedFilters: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    queryLimit: {
+      type: Number,
+      default: 1,
+    },
+  },
+  data() {
+    return {
+      operators: {
+        "greater than": ">",
+        "less than": "<",
+        equal: "==",
+        "not equal": "!==",
+        in: "in",
+        between: "between",
+      },
+    };
   },
   computed: {
     query() {
-      return (
+      const selectStatement =
         (this.selectedColumns.length === this.columns.length
           ? "SELECT *"
           : `SELECT ${this.selectedColumns
               .map((col) => `"${col}"`)
-              .join(", ")}`) + `\nFROM ${this.selectedTable}`
-      );
+              .join(", ")}`) + `\nFROM ${this.selectedTable}`;
+      if (this.selectedFilters.length > 0) {
+        const conditionsStatement = this.selectedFilters.map(
+          (filter, index) => {
+            let statement =
+              index > 0
+                ? `${filter.andOrOr} "${filter.column}"`
+                : `"${filter.column}"`;
+            if (
+              [
+                "equal",
+                "not equal",
+                "greater than",
+                "less than",
+                "in",
+              ].includes(filter.filter)
+            ) {
+              statement = `${statement} ${this.operators[filter.filter]} ${
+                filter.input1
+              }`;
+              return statement;
+            } else if (filter.filter === "between") {
+              statement = `${statement} ${this.operators[filter.filter]} '${
+                filter.input1
+              }' and '${filter.input2}'`;
+              return statement;
+            }
+            return statement;
+          }
+        );
+        return (
+          selectStatement +
+          "\nWHERE " +
+          conditionsStatement.join("\n") +
+          `\nlimit ${this.queryLimit}`
+        );
+      } else {
+        return selectStatement + `\nlimit ${this.queryLimit}`;
+      }
     },
   },
 };

@@ -5,22 +5,73 @@
       @select="setTable"
       :selected-table="selectedTable"
     />
-    <div class="d-flex justify-space-between align-center px-3">
-      <span>Total Columns ({{ tableColumns.length }})</span>
-      <v-btn small outlined text @click="selectAllColumns">
-        Select all columns
-      </v-btn>
-    </div>
+    <v-card flat>
+      <v-card-text class="d-flex justify-space-between align-center">
+        <span>Total Columns ({{ tableColumns.length }})</span>
+        <v-btn small outlined text @click="selectAllColumns">
+          Select all columns
+        </v-btn>
+      </v-card-text>
+    </v-card>
     <column-selector
       :columns="tableColumns"
       @update-columns="setColumns"
       :selected-columns="selectedColumns"
     />
+    <v-divider class="mb-3 mt-3"></v-divider>
+    <v-card flat>
+      <v-card-text class="d-flex justify-space-between align-center">
+        <span>FILTERS</span>
+        <v-btn
+          small
+          outlined
+          text
+          :disabled="!selectedColumns.length"
+          @click="setFilter"
+        >
+          <v-icon>mdi-plus</v-icon>
+          add filter
+        </v-btn>
+      </v-card-text>
+    </v-card>
+    <div v-if="selectedFilters.length > 0" class="mt-7">
+      <div v-for="(item, index) in selectedFilters" :key="index + item.column">
+        <filter-selector
+          :selected-filter="item"
+          :index="index"
+          :columns="tableColumns"
+          :selected-columns="selectedColumns"
+          @input="setField"
+          @clear-filter="clearFilter"
+          @remove-filter="removeFilter"
+        />
+      </div>
+    </div>
+    <v-divider></v-divider>
+    <v-card>
+      <v-card-text>
+        <span class="mb-5 my-5">LIMIT</span>
+        <v-divider></v-divider>
+        <v-text-field
+          v-model.number="queryLimit"
+          type="number"
+          outlined
+          dense
+          label="Please enter number of records to return"
+          class="mt-5"
+          required
+          :rules="[rules.required, rules.maxAndIntQueryRows]"
+        >
+        </v-text-field>
+      </v-card-text>
+    </v-card>
     <query
       v-if="selectedColumns.length"
       :columns="tableColumns"
       :selected-columns="selectedColumns"
       :selected-table="selectedTable"
+      :selected-filters="selectedFilters"
+      :query-limit="queryLimit"
     />
   </div>
 </template>
@@ -29,6 +80,7 @@
 import TableSelector from "../components/TableSelector";
 import ColumnSelector from "../components/ColumnSelector";
 import Query from "../components/Query";
+import FilterSelector from "../components/FilterSelector";
 const columnsForTable1 = [
   "Column A",
   "Column B",
@@ -52,12 +104,22 @@ export default {
     TableSelector,
     ColumnSelector,
     Query,
+    FilterSelector,
   },
   data() {
     return {
       tables: ["Table 1", "Table 2", "Table 3", "Table 4"],
       selectedTable: null,
       selectedColumns: [],
+      selectedFilters: [],
+      filterIndex: 0,
+      queryLimit: 100,
+      rules: {
+        required: (value) => !!value || "Required.",
+        maxAndIntQueryRows: (value) =>
+          (!!parseInt(value) && value >= 0 && value <= 100) ||
+          "Please insert a number between 1 and 100 rows",
+      },
     };
   },
   computed: {
@@ -84,6 +146,45 @@ export default {
     },
     selectAllColumns() {
       this.selectedColumns = [...this.tableColumns];
+    },
+    setFilter() {
+      const id = this.filterIndex;
+      const filterData = {
+        index: id,
+        column: null,
+        andOrOr: "and",
+        filter: null,
+        input1: null,
+        input2: null,
+      };
+      this.selectedFilters = [...this.selectedFilters, filterData];
+      this.filterIndex += 1;
+    },
+    removeFilter(index) {
+      this.selectedFilters = this.selectedFilters.filter(
+        (filter) => filter.index !== index
+      );
+      if (this.filterIndex > 0) {
+        this.filterIndex -= 1;
+      }
+    },
+    clearFilter(index) {
+      const newValue = this.selectedFilters.find(
+        (item) => item.index === index
+      );
+      newValue.filter = null;
+      newValue.input1 = null;
+      newValue.input2 = null;
+      this.$set(this.selectedFilters, index, newValue);
+    },
+    setField(index, key, value) {
+      const newValue = this.selectedFilters.find(
+        (item) => item.index === index
+      );
+      if (Object.keys(newValue).length) {
+        newValue[key] = value;
+        this.$set(this.selectedFilters, index, newValue);
+      }
     },
   },
 };
