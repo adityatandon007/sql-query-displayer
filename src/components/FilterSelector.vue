@@ -73,7 +73,7 @@
     </v-col>
     <v-col cols="1">
       <v-btn color="error" icon @click="removeFilter(localFilter.index)">
-        <v-icon>{{deleteOutlineIcon}}</v-icon>
+        <v-icon>{{ deleteOutlineIcon }}</v-icon>
       </v-btn>
     </v-col>
   </v-row>
