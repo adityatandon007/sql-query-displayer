@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     setColumns(columns) {
-      this.$emit("updateColumns", columns);
+      this.$emit("update-columns", columns);
     },
   },
 };

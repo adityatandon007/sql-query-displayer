@@ -16,12 +16,19 @@
       @update-columns="setColumns"
       :selected-columns="selectedColumns"
     />
+    <query
+      v-if="selectedColumns.length"
+      :columns="tableColumns"
+      :selected-columns="selectedColumns"
+      :selected-table="selectedTable"
+    />
   </div>
 </template>
 
 <script>
 import TableSelector from "../components/TableSelector";
 import ColumnSelector from "../components/ColumnSelector";
+import Query from "../components/Query";
 const columnsForTable1 = [
   "Column A",
   "Column B",
@@ -44,6 +51,7 @@ export default {
   components: {
     TableSelector,
     ColumnSelector,
+    Query,
   },
   data() {
     return {
