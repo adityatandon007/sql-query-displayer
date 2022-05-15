@@ -1,7 +1,9 @@
+
+   
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="12">
+  <v-card flat>
+    <v-card-text class="pa-0">
+      <div>
         <v-combobox
           :value="selectedColumns"
           :items="columns"
@@ -9,6 +11,7 @@
           multiple
           chips
           @change="setColumns"
+          hide-details
         >
           <template #selection="data">
             <v-chip
@@ -24,9 +27,10 @@
             </v-chip>
           </template>
         </v-combobox>
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+      <v-divider class="my-6"></v-divider>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

@@ -1,8 +1,9 @@
 <template>
-  <div class="mt-5">
-    <span class="subtitle-1 text-uppercase">SQL Statement</span>
-    <v-divider></v-divider>
-    <pre class="pb-5 pt-2" v-text="query"></pre>
+  <div class="mt-4">
+    <span class="text-uppercase">SQL Statement</span>
+    <div class="query-wrapper mt-4">
+      <pre class="pa-4" v-text="query"></pre>
+    </div>
   </div>
 </template>
 
@@ -99,3 +100,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.query-wrapper {
+  border: 2px solid #5e8c31;
+}
+</style>

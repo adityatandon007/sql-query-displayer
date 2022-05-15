@@ -1,26 +1,25 @@
 <template>
-  <div>
-    <table-selector
-      :tables="tables"
-      @select="setTable"
-      :selected-table="selectedTable"
-    />
-    <v-card flat>
-      <v-card-text class="d-flex justify-space-between align-center">
+  <v-container>
+    <v-card class="pa-4">
+      <table-selector
+        :tables="tables"
+        @select="setTable"
+        :selected-table="selectedTable"
+      />
+      <div class="d-flex justify-space-between align-center">
         <span>Total Columns ({{ tableColumns.length }})</span>
         <v-btn small outlined text @click="selectAllColumns">
           Select all columns
         </v-btn>
-      </v-card-text>
-    </v-card>
-    <column-selector
-      :columns="tableColumns"
-      @update-columns="setColumns"
-      :selected-columns="selectedColumns"
-    />
-    <v-divider class="mb-3 mt-3"></v-divider>
-    <v-card flat>
-      <v-card-text class="d-flex justify-space-between align-center">
+      </div>
+      <div>
+        <column-selector
+          :columns="tableColumns"
+          @update-columns="setColumns"
+          :selected-columns="selectedColumns"
+        />
+      </div>
+      <div class="d-flex justify-space-between align-center">
         <span>FILTERS</span>
         <v-btn
           small
@@ -32,25 +31,25 @@
           <v-icon>mdi-plus</v-icon>
           add filter
         </v-btn>
-      </v-card-text>
-    </v-card>
-    <div v-if="selectedFilters.length > 0" class="mt-7">
-      <div v-for="(item, index) in selectedFilters" :key="index + item.column">
-        <filter-selector
-          :selected-filter="item"
-          :index="index"
-          :columns="tableColumns"
-          :selected-columns="selectedColumns"
-          @input="setField"
-          @clear-filter="clearFilter"
-          @remove-filter="removeFilter"
-        />
       </div>
-    </div>
-    <v-divider></v-divider>
-    <v-card>
-      <v-card-text>
-        <span class="mb-5 my-5">LIMIT</span>
+      <div v-if="selectedFilters.length > 0" class="mt-6">
+        <div
+          v-for="(item, index) in selectedFilters"
+          :key="index + item.column"
+        >
+          <filter-selector
+            :selected-filter="item"
+            :index="index"
+            :columns="tableColumns"
+            :selected-columns="selectedColumns"
+            @input="setField"
+            @clear-filter="clearFilter"
+            @remove-filter="removeFilter"
+          />
+        </div>
+      </div>
+      <div class="my-4">
+        <span>LIMIT</span>
         <v-divider></v-divider>
         <v-text-field
           v-model.number="queryLimit"
@@ -60,20 +59,22 @@
           label="Please enter number of records to return"
           class="mt-5"
           required
+          hide-details="auto"
           :rules="[rules.required, rules.maxAndIntQueryRows]"
         >
         </v-text-field>
-      </v-card-text>
+      </div>
+      <v-divider></v-divider>
+      <query
+        v-if="selectedColumns.length"
+        :columns="tableColumns"
+        :selected-columns="selectedColumns"
+        :selected-table="selectedTable"
+        :selected-filters="selectedFilters"
+        :query-limit="queryLimit"
+      />
     </v-card>
-    <query
-      v-if="selectedColumns.length"
-      :columns="tableColumns"
-      :selected-columns="selectedColumns"
-      :selected-table="selectedTable"
-      :selected-filters="selectedFilters"
-      :query-limit="queryLimit"
-    />
-  </div>
+  </v-container>
 </template>
 
 <script>

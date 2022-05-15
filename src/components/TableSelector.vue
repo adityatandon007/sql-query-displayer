@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
-    <v-card-text>
-      <span class="subtitle-1 my-5">SELECT FROM</span>
+    <v-card-text class="pa-0">
+      <span class="my-5">SELECT FROM</span>
       <v-select
         :value="selectedTable"
         dense
@@ -9,10 +9,11 @@
         label="Please select a table"
         outlined
         class="mt-5"
+        hide-details
         @change="setSelectedTable"
       >
       </v-select>
-      <v-divider class="mb-3 mt-3"></v-divider>
+      <v-divider class="my-6"></v-divider>
     </v-card-text>
   </v-card>
 </template>
